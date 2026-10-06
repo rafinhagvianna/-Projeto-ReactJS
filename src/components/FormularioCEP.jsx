@@ -15,8 +15,6 @@ function FormularioCEP({ onConsultar }) {
   function enviarFormulario(evento) {
     evento.preventDefault()
     setErro('')
-
-    // Aceita oito dígitos ou o formato 00000-000, sem letras.
     const cepDigitado = cep.trim()
 
     if (!/^\d{5}-?\d{3}$/.test(cepDigitado)) {
