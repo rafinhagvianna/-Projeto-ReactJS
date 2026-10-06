@@ -1,3 +1,7 @@
+import { useState } from 'react'
+import Alert from 'react-bootstrap/Alert'
+import ResultadoEndereco from './components/ResultadoEndereco.jsx'
+import { consultarCEP } from './services/viacep.js'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -5,6 +9,24 @@ import Card from 'react-bootstrap/Card'
 import FormularioCEP from './components/FormularioCEP.jsx'
 
 function App() {
+  const [endereco, setEndereco] = useState(null)
+  const [erroConsulta, setErroConsulta] = useState('')
+
+  async function buscarEndereco(cep) {
+    setEndereco(null)
+    setErroConsulta('')
+
+    try {
+      const dados = await consultarCEP(cep)
+      setEndereco(dados)
+    } catch (erro) {
+      setErroConsulta(
+        erro instanceof TypeError
+          ? 'Não foi possível conectar ao serviço. Tente novamente.'
+          : erro.message,
+      )
+    }
+  }
   return (
     <>
       <header className="cabecalho py-4">
@@ -22,24 +44,18 @@ function App() {
                 <h2 id="titulo-consulta" className="h4">Consultar CEP</h2>
                 <p className="text-secondary">Encontre o endereço a partir do CEP.</p>
 
-                <FormularioCEP />
+                <FormularioCEP onConsultar={buscarEndereco} />
+                {erroConsulta && (
+                  <Alert variant="danger" className="mt-3 mb-0" role="alert">
+                    {erroConsulta}
+                  </Alert>
+                )}
               </Card.Body>
             </Card>
           </Col>
 
           <Col xs={12} md={7}>
-            <Card as="section" className="h-100 shadow-sm" aria-labelledby="titulo-resultado">
-              <Card.Body>
-                <h2 id="titulo-resultado" className="h4">Endereço encontrado</h2>
-                <div className="resultado-vazio text-center rounded p-4 mt-3">
-                  <p className="fw-semibold mb-2">Nenhum endereço consultado</p>
-                  <p className="text-secondary mb-0">
-                    O resultado da sua consulta aparecerá aqui, com rua, bairro,
-                    cidade e estado.
-                  </p>
-                </div>
-              </Card.Body>
-            </Card>
+            <ResultadoEndereco endereco={endereco} />
           </Col>
         </Row>
       </Container>

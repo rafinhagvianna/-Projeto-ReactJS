@@ -8,7 +8,7 @@ Desenvolver uma aplicação React de página única (SPA) para consultar endere�
 
 ## Situação atual
 
-Terceira etapa: formulário controlado com useState e validação do CEP. O envio pelo botão ou pela tecla Enter não recarrega a página. São aceitos oito dígitos, com ou sem hífen no formato 00000-000, e espaços nas extremidades são ignorados. Entradas inválidas exibem uma mensagem; entradas válidas exibem a confirmação do formato e o CEP sem hífen. Essa confirmação não verifica se o CEP existe: a integração com a API será feita na próxima etapa.
+Quarta etapa: consulta real ao ViaCEP com fetch e async/await. O formulário valida e normaliza o CEP e chama uma função recebida por props. O App consulta o serviço, guarda o endereço em useState e o envia ao componente ResultadoEndereco. São exibidos CEP, rua, bairro, cidade e estado; campos vazios aparecem como “Não informado”. Há mensagens básicas para consulta sem sucesso. O indicador de carregamento e o bloqueio de envio durante a busca serão adicionados na próxima etapa.
 
 ## Integrantes e responsabilidades
 
@@ -25,7 +25,8 @@ Os nomes dos dois integrantes ainda precisam ser preenchidos pela equipe.
 - Vite para desenvolvimento e geração da versão de produção.
 - React Bootstrap e Bootstrap para componentes visuais e layout responsivo.
 - useState para controlar o campo e as mensagens do formulário.
-- Planejadas: API ViaCEP, fetch, useEffect, useRef e localStorage.
+- API ViaCEP e fetch com async/await para consultar endereços.
+- Planejadas: useEffect, useRef e localStorage.
 - O hook escolhido da lista da disciplina é useRef, para focar o campo de CEP.
 
 ## Como executar
@@ -61,6 +62,9 @@ Abra no navegador o endereço informado pelo terminal. Para encerrar o servidor,
 src/
   components/
     FormularioCEP.jsx  Campo, envio e validação do CEP
+    ResultadoEndereco.jsx  Exibição dos dados recebidos por props
+  services/
+    viacep.js  Requisição à API ViaCEP
   App.jsx       Componente principal da aplicação
   main.jsx      Inicialização do React
   styles.css    Estilos básicos
@@ -68,7 +72,7 @@ index.html      Página HTML que recebe a aplicação
 vite.config.js  Configuração do Vite
 ```
 
-Os componentes de resultado e favoritos e o serviço de consulta serão criados nas próximas etapas.
+O componente de favoritos será criado nas próximas etapas.
 
 ## Funcionalidades planejadas
 

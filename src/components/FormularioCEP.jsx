@@ -1,23 +1,20 @@
 import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
-import Alert from 'react-bootstrap/Alert'
 
-function FormularioCEP() {
+
+function FormularioCEP({ onConsultar }) {
   const [cep, setCep] = useState('')
   const [erro, setErro] = useState('')
-  const [cepValidado, setCepValidado] = useState('')
 
   function alterarCep(evento) {
     setCep(evento.target.value)
     setErro('')
-    setCepValidado('')
   }
 
   function enviarFormulario(evento) {
     evento.preventDefault()
     setErro('')
-    setCepValidado('')
 
     // Aceita oito dígitos ou o formato 00000-000, sem letras.
     const cepDigitado = cep.trim()
@@ -28,7 +25,7 @@ function FormularioCEP() {
     }
 
     const cepNormalizado = cepDigitado.replace('-', '')
-    setCepValidado(cepNormalizado)
+    onConsultar(cepNormalizado)
   }
 
   return (
@@ -58,11 +55,6 @@ function FormularioCEP() {
         Consultar
       </Button>
 
-      {cepValidado && (
-        <Alert variant="success" className="mt-3 mb-0" role="status">
-          O CEP {cepValidado} está no formato correto.
-        </Alert>
-      )}
     </Form>
   )
 }
