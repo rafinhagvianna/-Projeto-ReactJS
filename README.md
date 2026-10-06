@@ -8,7 +8,7 @@ Desenvolver uma aplicação React de página única (SPA) para consultar endere�
 
 ## Situação atual
 
-Primeira etapa: estrutura inicial com React, JavaScript e Vite. A página inicial já pode ser executada. Consulta, favoritos e React Bootstrap serão implementados nas próximas etapas.
+Segunda etapa: interface inicial com React Bootstrap. A página apresenta cabeçalho, área de consulta e espaço para o resultado, em colunas no computador e empilhados no celular. O campo e o botão de consulta estão desabilitados nesta etapa; a validação, a integração com a API e os favoritos serão implementados nas próximas etapas.
 
 ## Integrantes e responsabilidades
 
@@ -23,7 +23,8 @@ Os nomes dos dois integrantes ainda precisam ser preenchidos pela equipe.
 
 - React e JavaScript para a interface e a lógica.
 - Vite para desenvolvimento e geração da versão de produção.
-- Planejadas: React Bootstrap, API ViaCEP, fetch, useState, useEffect, useRef e localStorage.
+- React Bootstrap e Bootstrap para componentes visuais e layout responsivo.
+- Planejadas: API ViaCEP, fetch, useState, useEffect, useRef e localStorage.
 - O hook escolhido da lista da disciplina é useRef, para focar o campo de CEP.
 
 ## Como executar
