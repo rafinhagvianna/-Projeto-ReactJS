@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
+import Spinner from 'react-bootstrap/Spinner'
 
-
-function FormularioCEP({ onConsultar }) {
+function FormularioCEP({ onConsultar, carregando }) {
   const [cep, setCep] = useState('')
   const [erro, setErro] = useState('')
 
@@ -14,6 +14,8 @@ function FormularioCEP({ onConsultar }) {
 
   function enviarFormulario(evento) {
     evento.preventDefault()
+    if (carregando) return
+
     setErro('')
     const cepDigitado = cep.trim()
 
@@ -36,6 +38,7 @@ function FormularioCEP({ onConsultar }) {
           autoComplete="postal-code"
           placeholder="00000-000"
           value={cep}
+          disabled={carregando}
           onChange={alterarCep}
           isInvalid={Boolean(erro)}
           aria-invalid={Boolean(erro)}
@@ -49,10 +52,16 @@ function FormularioCEP({ onConsultar }) {
         </Form.Text>
       </Form.Group>
 
-      <Button type="submit" className="w-100">
-        Consultar
+      <Button type="submit" className="w-100" disabled={carregando}>
+        {carregando && (
+          <Spinner animation="border" size="sm" className="me-2" aria-hidden="true" />
+        )}
+        {carregando ? 'Consultando...' : 'Consultar'}
       </Button>
 
+      <span className="visually-hidden" role="status">
+        {carregando ? 'Consultando CEP. Aguarde.' : ''}
+      </span>
     </Form>
   )
 }

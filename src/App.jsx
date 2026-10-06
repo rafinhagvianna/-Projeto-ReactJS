@@ -11,8 +11,12 @@ import FormularioCEP from './components/FormularioCEP.jsx'
 function App() {
   const [endereco, setEndereco] = useState(null)
   const [erroConsulta, setErroConsulta] = useState('')
+  const [carregando, setCarregando] = useState(false)
 
   async function buscarEndereco(cep) {
+    if (carregando) return
+
+    setCarregando(true)
     setEndereco(null)
     setErroConsulta('')
 
@@ -23,10 +27,15 @@ function App() {
       setErroConsulta(
         erro instanceof TypeError
           ? 'Não foi possível conectar ao serviço. Tente novamente.'
-          : erro.message,
+          : erro instanceof SyntaxError
+            ? 'O serviço retornou uma resposta inválida. Tente novamente.'
+            : erro.message,
       )
+    } finally {
+      setCarregando(false)
     }
   }
+
   return (
     <>
       <header className="cabecalho py-4">
@@ -44,7 +53,7 @@ function App() {
                 <h2 id="titulo-consulta" className="h4">Consultar CEP</h2>
                 <p className="text-secondary">Encontre o endereço a partir do CEP.</p>
 
-                <FormularioCEP onConsultar={buscarEndereco} />
+                <FormularioCEP onConsultar={buscarEndereco} carregando={carregando} />
                 {erroConsulta && (
                   <Alert variant="danger" className="mt-3 mb-0" role="alert">
                     {erroConsulta}

@@ -8,7 +8,7 @@ Desenvolver uma aplicação React de página única (SPA) para consultar endere�
 
 ## Situação atual
 
-Quarta etapa: consulta real ao ViaCEP com fetch e async/await. O formulário valida e normaliza o CEP e chama uma função recebida por props. O App consulta o serviço, guarda o endereço em useState e o envia ao componente ResultadoEndereco. São exibidos CEP, rua, bairro, cidade e estado; campos vazios aparecem como “Não informado”. Há mensagens básicas para consulta sem sucesso. O indicador de carregamento e o bloqueio de envio durante a busca serão adicionados na próxima etapa.
+Quinta etapa: consulta com indicador de carregamento e tratamento de falhas. Durante a busca, o botão mostra “Consultando...” com um indicador visual, e o campo e o envio ficam desabilitados. Ao iniciar a requisição, o resultado anterior e a mensagem de erro são limpos. CEP inexistente, falha de conexão, erro HTTP e resposta JSON inválida recebem mensagens. O bloco finally encerra o carregamento tanto no sucesso quanto no erro, permitindo uma nova tentativa. A validação de formato continua sendo feita antes de consultar a API.
 
 ## Integrantes e responsabilidades
 
