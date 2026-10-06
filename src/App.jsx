@@ -2,8 +2,7 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
+import FormularioCEP from './components/FormularioCEP.jsx'
 
 function App() {
   return (
@@ -23,22 +22,7 @@ function App() {
                 <h2 id="titulo-consulta" className="h4">Consultar CEP</h2>
                 <p className="text-secondary">Encontre o endereço a partir do CEP.</p>
 
-                <Form.Group controlId="cep" className="mb-3">
-                  <Form.Label>CEP</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="00000-000"
-                    aria-describedby="ajuda-cep"
-                    disabled
-                  />
-                  <Form.Text id="ajuda-cep">
-                    A consulta estará disponível em breve.
-                  </Form.Text>
-                </Form.Group>
-
-                <Button type="button" className="w-100" disabled>
-                  Consultar
-                </Button>
+                <FormularioCEP />
               </Card.Body>
             </Card>
           </Col>

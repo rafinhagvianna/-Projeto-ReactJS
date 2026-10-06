@@ -8,7 +8,7 @@ Desenvolver uma aplicação React de página única (SPA) para consultar endere�
 
 ## Situação atual
 
-Segunda etapa: interface inicial com React Bootstrap. A página apresenta cabeçalho, área de consulta e espaço para o resultado, em colunas no computador e empilhados no celular. O campo e o botão de consulta estão desabilitados nesta etapa; a validação, a integração com a API e os favoritos serão implementados nas próximas etapas.
+Terceira etapa: formulário controlado com useState e validação do CEP. O envio pelo botão ou pela tecla Enter não recarrega a página. São aceitos oito dígitos, com ou sem hífen no formato 00000-000, e espaços nas extremidades são ignorados. Entradas inválidas exibem uma mensagem; entradas válidas exibem a confirmação do formato e o CEP sem hífen. Essa confirmação não verifica se o CEP existe: a integração com a API será feita na próxima etapa.
 
 ## Integrantes e responsabilidades
 
@@ -24,7 +24,8 @@ Os nomes dos dois integrantes ainda precisam ser preenchidos pela equipe.
 - React e JavaScript para a interface e a lógica.
 - Vite para desenvolvimento e geração da versão de produção.
 - React Bootstrap e Bootstrap para componentes visuais e layout responsivo.
-- Planejadas: API ViaCEP, fetch, useState, useEffect, useRef e localStorage.
+- useState para controlar o campo e as mensagens do formulário.
+- Planejadas: API ViaCEP, fetch, useEffect, useRef e localStorage.
 - O hook escolhido da lista da disciplina é useRef, para focar o campo de CEP.
 
 ## Como executar
@@ -58,6 +59,8 @@ Abra no navegador o endereço informado pelo terminal. Para encerrar o servidor,
 
 ```text
 src/
+  components/
+    FormularioCEP.jsx  Campo, envio e validação do CEP
   App.jsx       Componente principal da aplicação
   main.jsx      Inicialização do React
   styles.css    Estilos básicos
@@ -65,7 +68,7 @@ index.html      Página HTML que recebe a aplicação
 vite.config.js  Configuração do Vite
 ```
 
-Os componentes de formulário, resultado e favoritos e o serviço de consulta serão criados nas respectivas etapas.
+Os componentes de resultado e favoritos e o serviço de consulta serão criados nas próximas etapas.
 
 ## Funcionalidades planejadas
 
