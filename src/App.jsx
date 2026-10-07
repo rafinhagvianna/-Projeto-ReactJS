@@ -8,7 +8,6 @@ import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import FormularioCEP from './components/FormularioCEP.jsx'
 import Favoritos from './components/Favoritos.jsx'
-import Favoritos from './components/Favoritos.jsx'
 
 function App() {
   const [endereco, setEndereco] = useState(null)
