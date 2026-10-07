@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Alert from 'react-bootstrap/Alert'
 import ResultadoEndereco from './components/ResultadoEndereco.jsx'
 import { consultarCEP } from './services/viacep.js'
@@ -14,7 +14,15 @@ function App() {
   const [endereco, setEndereco] = useState(null)
   const [erroConsulta, setErroConsulta] = useState('')
   const [carregando, setCarregando] = useState(false)
-  const [favoritos, setFavoritos] = useState([])
+  const [favoritos, setFavoritos] = useState(() => {
+    const favoritosSalvos = localStorage.getItem('favoritos')
+
+    return favoritosSalvos ? JSON.parse(favoritosSalvos) : []
+  })
+
+  useEffect(() => {
+    localStorage.setItem('favoritos', JSON.stringify(favoritos))
+  }, [favoritos])
 
   function limparConsulta() {
     setEndereco(null)
