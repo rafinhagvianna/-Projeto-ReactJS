@@ -21,6 +21,12 @@ function App() {
     setErroConsulta('')
   }
 
+  function removerFavorito(cep) {
+    setFavoritos((favoritosAtuais) =>
+      favoritosAtuais.filter((favorito) => favorito.cep !== cep),
+    )
+  }
+
   function salvarFavorito() {
     if (!endereco) return
 
@@ -92,7 +98,7 @@ function App() {
               endereco={endereco}
               onFavoritar={salvarFavorito}
             />
-            <Favoritos favoritos={favoritos} />
+            <Favoritos favoritos={favoritos} onRemover={removerFavorito} />
           </Col>
         </Row>
       </Container>

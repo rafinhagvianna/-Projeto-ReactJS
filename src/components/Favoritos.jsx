@@ -1,6 +1,7 @@
 import Card from 'react-bootstrap/Card'
+import Button from 'react-bootstrap/Button'
 
-function Favoritos({ favoritos }) {
+function Favoritos({ favoritos, onRemover }) {
   return (
     <Card as="section" className="shadow-sm mt-4" aria-labelledby="titulo-favoritos">
       <Card.Body>
@@ -18,9 +19,17 @@ function Favoritos({ favoritos }) {
                 <p className="mb-1">
                   {favorito.logradouro || 'Endereço não informado'}
                 </p>
-                <p className="text-secondary mb-0">
+                <p className="text-secondary mb-2">
                   {favorito.localidade || 'Cidade não informada'} / {favorito.uf || '--'}
                 </p>
+                <Button
+                  type="button"
+                  variant="outline-danger"
+                  size="sm"
+                  onClick={() => onRemover(favorito.cep)}
+                >
+                  Remover
+                </Button>
               </article>
             ))}
           </div>
