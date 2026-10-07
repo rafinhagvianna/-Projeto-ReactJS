@@ -12,10 +12,23 @@ function App() {
   const [endereco, setEndereco] = useState(null)
   const [erroConsulta, setErroConsulta] = useState('')
   const [carregando, setCarregando] = useState(false)
+  const [favoritos, setFavoritos] = useState([])
 
   function limparConsulta() {
     setEndereco(null)
     setErroConsulta('')
+  }
+
+  function salvarFavorito() {
+    if (!endereco) return
+
+    setFavoritos((favoritosAtuais) => {
+      const jaExiste = favoritosAtuais.some((favorito) => favorito.cep === endereco.cep)
+
+      if (jaExiste) return favoritosAtuais
+
+      return [...favoritosAtuais, endereco]
+    })
   }
 
   async function buscarEndereco(cep) {
@@ -73,7 +86,10 @@ function App() {
           </Col>
 
           <Col xs={12} md={7}>
-            <ResultadoEndereco endereco={endereco} />
+            <ResultadoEndereco
+              endereco={endereco}
+              onFavoritar={salvarFavorito}
+            />
           </Col>
         </Row>
       </Container>
