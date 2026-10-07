@@ -13,6 +13,11 @@ function App() {
   const [erroConsulta, setErroConsulta] = useState('')
   const [carregando, setCarregando] = useState(false)
 
+  function limparConsulta() {
+    setEndereco(null)
+    setErroConsulta('')
+  }
+
   async function buscarEndereco(cep) {
     if (carregando) return
 
@@ -53,7 +58,11 @@ function App() {
                 <h2 id="titulo-consulta" className="h4">Consultar CEP</h2>
                 <p className="text-secondary">Encontre o endereço a partir do CEP.</p>
 
-                <FormularioCEP onConsultar={buscarEndereco} carregando={carregando} />
+                <FormularioCEP
+                  onConsultar={buscarEndereco}
+                  onNovaConsulta={limparConsulta}
+                  carregando={carregando}
+                />
                 {erroConsulta && (
                   <Alert variant="danger" className="mt-3 mb-0" role="alert">
                     {erroConsulta}

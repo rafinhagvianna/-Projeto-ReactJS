@@ -1,15 +1,25 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Spinner from 'react-bootstrap/Spinner'
 
-function FormularioCEP({ onConsultar, carregando }) {
+function FormularioCEP({ onConsultar, onNovaConsulta, carregando }) {
   const [cep, setCep] = useState('')
   const [erro, setErro] = useState('')
+  const campoCep = useRef(null)
 
   function alterarCep(evento) {
     setCep(evento.target.value)
     setErro('')
+  }
+
+  function novaConsulta() {
+    if (carregando) return
+
+    setCep('')
+    setErro('')
+    onNovaConsulta()
+    campoCep.current.focus()
   }
 
   function enviarFormulario(evento) {
@@ -21,6 +31,7 @@ function FormularioCEP({ onConsultar, carregando }) {
 
     if (!/^\d{5}-?\d{3}$/.test(cepDigitado)) {
       setErro('Digite um CEP com 8 números, como 01001000 ou 01001-000.')
+      campoCep.current.focus()
       return
     }
 
@@ -33,6 +44,7 @@ function FormularioCEP({ onConsultar, carregando }) {
       <Form.Group controlId="cep" className="mb-3">
         <Form.Label>CEP</Form.Label>
         <Form.Control
+          ref={campoCep}
           type="text"
           inputMode="numeric"
           autoComplete="postal-code"
@@ -57,6 +69,16 @@ function FormularioCEP({ onConsultar, carregando }) {
           <Spinner animation="border" size="sm" className="me-2" aria-hidden="true" />
         )}
         {carregando ? 'Consultando...' : 'Consultar'}
+      </Button>
+
+      <Button
+        type="button"
+        variant="outline-secondary"
+        className="w-100 mt-2"
+        onClick={novaConsulta}
+        disabled={carregando}
+      >
+        Nova consulta
       </Button>
 
       <span className="visually-hidden" role="status">

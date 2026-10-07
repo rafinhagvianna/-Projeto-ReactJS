@@ -8,7 +8,7 @@ Desenvolver uma aplicação React de página única (SPA) para consultar endere�
 
 ## Situação atual
 
-Quinta etapa: consulta com indicador de carregamento e tratamento de falhas. Durante a busca, o botão mostra “Consultando...” com um indicador visual, e o campo e o envio ficam desabilitados. Ao iniciar a requisição, o resultado anterior e a mensagem de erro são limpos. CEP inexistente, falha de conexão, erro HTTP e resposta JSON inválida recebem mensagens. O bloco finally encerra o carregamento tanto no sucesso quanto no erro, permitindo uma nova tentativa. A validação de formato continua sendo feita antes de consultar a API.
+Sexta etapa: consulta ao ViaCEP com validação, carregamento, tratamento de erros e botão “Nova consulta”. O botão limpa o campo, o endereço e as mensagens e devolve o foco ao campo de CEP. Entradas com formato inválido também devolvem o foco ao campo. Durante a requisição, o campo e os dois botões ficam desabilitados. Favoritos serão implementados nas próximas etapas.
 
 ## Integrantes e responsabilidades
 
@@ -26,7 +26,8 @@ Os nomes dos dois integrantes ainda precisam ser preenchidos pela equipe.
 - React Bootstrap e Bootstrap para componentes visuais e layout responsivo.
 - useState para controlar o campo e as mensagens do formulário.
 - API ViaCEP e fetch com async/await para consultar endereços.
-- Planejadas: useEffect, useRef e localStorage.
+- useRef para acessar e focar o campo de CEP.
+- Planejadas: useEffect e localStorage.
 - O hook escolhido da lista da disciplina é useRef, para focar o campo de CEP.
 
 ## Como executar
@@ -74,7 +75,7 @@ vite.config.js  Configuração do Vite
 
 O componente de favoritos será criado nas próximas etapas.
 
-## Funcionalidades planejadas
+## Funcionalidades do projeto
 
 - Consultar CEP com ou sem hífen.
 - Validar a entrada e tratar carregamento e erros.
@@ -92,3 +93,31 @@ Os favoritos ficarão apenas no navegador utilizado. Consultas dependerão de in
 [Documentação do ViaCEP](https://viacep.com.br/)
 
 Exemplo de endpoint: `https://viacep.com.br/ws/01001000/json/`.
+
+## Fluxo da consulta
+
+1. FormularioCEP guarda o texto digitado em useState.
+2. O envio chama preventDefault para não recarregar a página e valida o formato.
+3. Um CEP válido é normalizado, removendo o hífen, e enviado à função onConsultar recebida por props.
+4. O App ativa o carregamento, limpa o resultado anterior e chama consultarCEP.
+5. O serviço viacep.js usa fetch e async/await para obter o JSON.
+6. O App guarda o endereço e o passa por props para ResultadoEndereco, ou exibe uma mensagem de erro.
+7. O bloco finally encerra o carregamento em ambos os casos.
+
+## Uso de useRef
+
+O formulário cria a referência campoCep com useRef(null) e a associa ao campo por meio da propriedade ref. Depois que o campo aparece na tela, campoCep.current aponta para o elemento de entrada. A chamada campoCep.current.focus() coloca o cursor nesse elemento.
+
+Isso ocorre quando o formato é inválido ou quando o usuário clica em “Nova consulta”. O texto digitado continua em useState; useRef é usado apenas para acessar o campo. Alterar uma referência não provoca uma nova renderização.
+
+O botão “Nova consulta” limpa os estados locais do formulário e chama onNovaConsulta, recebida do App, para limpar o resultado e o erro da API. Seu tipo é button para não enviar o formulário. Ele fica desabilitado durante uma requisição.
+
+## Roteiro de verificação manual
+
+- Enviar um campo vazio ou um CEP incompleto: exibir erro e focar o campo.
+- Consultar 01001000 e 01001-000: mostrar o endereço da Praça da Sé, em São Paulo/SP.
+- Durante a consulta: mostrar carregamento e desabilitar o campo e os dois botões.
+- Consultar 00000000: mostrar CEP não encontrado e liberar os controles.
+- Simular falta de conexão: mostrar mensagem de falha e liberar os controles.
+- Após um resultado ou erro, clicar em “Nova consulta”: limpar campo, resultado e mensagens, mantendo o foco no campo.
+- Digitar outro CEP e pressionar Enter: consultar sem recarregar a página.
