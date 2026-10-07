@@ -4,11 +4,11 @@ Projeto 1 da disciplina **Programação Web Fullstack**.
 
 ## Objetivo
 
-Desenvolver uma aplicação React de página única (SPA) para consultar endereços pelo CEP utilizando a API ViaCEP e organizar os resultados em favoritos. As consultas serão feitas com AJAX, sem recarregar a página.
+Desenvolver uma aplicação React de página única (SPA) para consultar endereços pelo CEP utilizando a API ViaCEP e organizar os resultados em favoritos. As consultas são feitas com AJAX, sem recarregar a página.
 
 ## Situação atual
 
-Sexta etapa: consulta ao ViaCEP com validação, carregamento, tratamento de erros e botão “Nova consulta”. O botão limpa o campo, o endereço e as mensagens e devolve o foco ao campo de CEP. Entradas com formato inválido também devolvem o foco ao campo. Durante a requisição, o campo e os dois botões ficam desabilitados. Favoritos serão implementados nas próximas etapas.
+Décima segunda etapa: favoritos completos, com salvamento sem duplicação, listagem, remoção, filtro por CEP ou cidade, persistência no localStorage e acabamento visual responsivo.
 
 ## Integrantes e responsabilidades
 
@@ -24,11 +24,11 @@ Os nomes dos dois integrantes ainda precisam ser preenchidos pela equipe.
 - React e JavaScript para a interface e a lógica.
 - Vite para desenvolvimento e geração da versão de produção.
 - React Bootstrap e Bootstrap para componentes visuais e layout responsivo.
-- useState para controlar o campo e as mensagens do formulário.
+- useState para controlar o formulário, favoritos e filtro.
+- useEffect para sincronizar os favoritos com o localStorage.
 - API ViaCEP e fetch com async/await para consultar endereços.
 - useRef para acessar e focar o campo de CEP.
-- Planejadas: useEffect e localStorage.
-- O hook escolhido da lista da disciplina é useRef, para focar o campo de CEP.
+- localStorage para manter os favoritos no navegador.
 
 ## Como executar
 
@@ -57,23 +57,22 @@ Abra no navegador o endereço informado pelo terminal. Para encerrar o servidor,
 | npm run build | Gerar a versão de produção na pasta dist |
 | npm run preview | Visualizar localmente a versão gerada pelo build |
 
-## Estrutura inicial
+## Estrutura do projeto
 
 ```text
 src/
   components/
     FormularioCEP.jsx  Campo, envio e validação do CEP
     ResultadoEndereco.jsx  Exibição dos dados recebidos por props
+    Favoritos.jsx  Lista, filtro e remoção dos favoritos
   services/
     viacep.js  Requisição à API ViaCEP
-  App.jsx       Componente principal da aplicação
+  App.jsx       Componente principal e estado dos favoritos
   main.jsx      Inicialização do React
-  styles.css    Estilos básicos
+  styles.css    Estilos básicos e responsivos
 index.html      Página HTML que recebe a aplicação
 vite.config.js  Configuração do Vite
 ```
-
-O componente de favoritos será criado nas próximas etapas.
 
 ## Funcionalidades do projeto
 
@@ -82,11 +81,22 @@ O componente de favoritos será criado nas próximas etapas.
 - Exibir CEP, rua, bairro, cidade e estado.
 - Iniciar nova consulta e focar o campo com useRef.
 - Salvar favoritos sem duplicação.
-- Listar, filtrar por cidade ou CEP e remover favoritos.
+- Listar e remover favoritos.
+- Filtrar favoritos por CEP ou cidade.
 - Persistir favoritos no navegador com localStorage.
 - Adaptar a interface para celular e computador.
 
-Os favoritos ficarão apenas no navegador utilizado. Consultas dependerão de internet e da disponibilidade da API.
+Os favoritos ficam apenas no navegador utilizado. As consultas dependem de internet e da disponibilidade da API.
+
+## Fluxo dos favoritos
+
+1. Depois de consultar um CEP, o usuário pode salvar o endereço.
+2. O App verifica se o CEP já está nos favoritos antes de adicionar.
+3. O componente Favoritos mostra os endereços salvos.
+4. O usuário pode pesquisar por CEP ou cidade no campo de filtro.
+5. O botão Remover exclui o favorito pelo CEP.
+6. O useEffect salva a lista atual no localStorage.
+7. Ao abrir a aplicação novamente, os favoritos salvos são carregados.
 
 ## Referência da API
 
@@ -94,23 +104,11 @@ Os favoritos ficarão apenas no navegador utilizado. Consultas dependerão de in
 
 Exemplo de endpoint: `https://viacep.com.br/ws/01001000/json/`.
 
-## Fluxo da consulta
-
-1. FormularioCEP guarda o texto digitado em useState.
-2. O envio chama preventDefault para não recarregar a página e valida o formato.
-3. Um CEP válido é normalizado, removendo o hífen, e enviado à função onConsultar recebida por props.
-4. O App ativa o carregamento, limpa o resultado anterior e chama consultarCEP.
-5. O serviço viacep.js usa fetch e async/await para obter o JSON.
-6. O App guarda o endereço e o passa por props para ResultadoEndereco, ou exibe uma mensagem de erro.
-7. O bloco finally encerra o carregamento em ambos os casos.
-
 ## Uso de useRef
 
 O formulário cria a referência campoCep com useRef(null) e a associa ao campo por meio da propriedade ref. Depois que o campo aparece na tela, campoCep.current aponta para o elemento de entrada. A chamada campoCep.current.focus() coloca o cursor nesse elemento.
 
 Isso ocorre quando o formato é inválido ou quando o usuário clica em “Nova consulta”. O texto digitado continua em useState; useRef é usado apenas para acessar o campo. Alterar uma referência não provoca uma nova renderização.
-
-O botão “Nova consulta” limpa os estados locais do formulário e chama onNovaConsulta, recebida do App, para limpar o resultado e o erro da API. Seu tipo é button para não enviar o formulário. Ele fica desabilitado durante uma requisição.
 
 ## Roteiro de verificação manual
 
@@ -118,6 +116,10 @@ O botão “Nova consulta” limpa os estados locais do formulário e chama onNo
 - Consultar 01001000 e 01001-000: mostrar o endereço da Praça da Sé, em São Paulo/SP.
 - Durante a consulta: mostrar carregamento e desabilitar o campo e os dois botões.
 - Consultar 00000000: mostrar CEP não encontrado e liberar os controles.
-- Simular falta de conexão: mostrar mensagem de falha e liberar os controles.
-- Após um resultado ou erro, clicar em “Nova consulta”: limpar campo, resultado e mensagens, mantendo o foco no campo.
+- Após um resultado, salvar o endereço nos favoritos.
+- Tentar salvar o mesmo CEP novamente: manter apenas um favorito.
+- Filtrar por parte do CEP ou pelo nome da cidade.
+- Remover um favorito e verificar que ele desaparece da lista.
+- Recarregar a página e verificar que os favoritos continuam salvos.
+- Clicar em “Nova consulta”: limpar campo, resultado e mensagens, mantendo o foco no campo.
 - Digitar outro CEP e pressionar Enter: consultar sem recarregar a página.

@@ -13,3 +13,22 @@ body {
   background-color: #f5f7fa;
   border: 1px dashed #adb5bd;
 }
+
+.lista-favoritos {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.favorito-item {
+  background-color: #fff;
+}
+
+@media (max-width: 767.98px) {
+  .cabecalho {
+    text-align: center;
+  }
+
+  .lista-favoritos {
+    gap: 0.5rem;
+  }
+}
