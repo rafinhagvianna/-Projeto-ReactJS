@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button'
 
 function ResultadoEndereco({ endereco, onFavoritar }) {
   return (
-    <Card as="section" className="h-100 shadow-sm" aria-labelledby="titulo-resultado">
+    <Card as="section" className="shadow-sm" aria-labelledby="titulo-resultado">
       <Card.Body>
         <h2 id="titulo-resultado" className="h4">Endereço encontrado</h2>
         <div aria-live="polite">

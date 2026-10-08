@@ -12,12 +12,12 @@ Décima segunda etapa: favoritos completos, com salvamento sem duplicação, lis
 
 ## Integrantes e responsabilidades
 
-Os nomes dos dois integrantes ainda precisam ser preenchidos pela equipe.
+Divisão de responsabilidades conforme o desenvolvimento registrado no Git:
 
-| Integrante | Responsabilidade | Etapas planejadas |
+| Integrante | Responsabilidade | Etapas do plano |
 | --- | --- | --- |
-| Integrante 1 — nome a preencher | Estrutura, consulta à API, validações, erros e useRef | Commits 1 a 6 |
-| Integrante 2 — nome a preencher | Favoritos, filtro, persistência e acabamento visual | Commits 7 a 12 |
+| Felippe Costa | Estrutura, consulta à API, validações, erros e useRef | 1 a 6 |
+| Rafael de Godoy Vianna | Favoritos, filtro, persistência e acabamento visual | 7 a 12 |
 
 ## Tecnologias
 
@@ -67,6 +67,7 @@ src/
     Favoritos.jsx  Lista, filtro e remoção dos favoritos
   services/
     viacep.js  Requisição à API ViaCEP
+    favoritos.js  Leitura e validação dos favoritos salvos
   App.jsx       Componente principal e estado dos favoritos
   main.jsx      Inicialização do React
   styles.css    Estilos básicos e responsivos
@@ -82,7 +83,8 @@ vite.config.js  Configuração do Vite
 - Iniciar nova consulta e focar o campo com useRef.
 - Salvar favoritos sem duplicação.
 - Listar e remover favoritos.
-- Filtrar favoritos por CEP ou cidade.
+- Filtrar favoritos por CEP com ou sem hífen ou por cidade.
+- Exibir a quantidade de favoritos e informar quando o filtro não encontra resultados.
 - Persistir favoritos no navegador com localStorage.
 - Adaptar a interface para celular e computador.
 
@@ -123,3 +125,48 @@ Isso ocorre quando o formato é inválido ou quando o usuário clica em “Nova 
 - Recarregar a página e verificar que os favoritos continuam salvos.
 - Clicar em “Nova consulta”: limpar campo, resultado e mensagens, mantendo o foco no campo.
 - Digitar outro CEP e pressionar Enter: consultar sem recarregar a página.
+
+## Tratamento do armazenamento
+
+A função carregarFavoritos usa try/catch para tratar falhas de leitura ou JSON inválido. Se o conteúdo não for uma lista, começa com uma lista vazia. Registros inválidos são ignorados, preservando os endereços válidos. A comparação dos CEPs ignora o hífen para evitar duplicação.
+
+A gravação também usa try/catch. Se o navegador não permitir salvar, a aplicação continua funcionando e avisa que as alterações serão mantidas somente enquanto a página estiver aberta.
+
+## Verificações realizadas em 07/10/2026
+
+| Verificação | Resultado |
+| --- | --- |
+| npm run build e npm run lint | Aprovados |
+| Consulta real de 01001-000 no navegador | Endereço da Praça da Sé exibido |
+| Salvar o mesmo endereço duas vezes | Um favorito mantido |
+| Filtro por 01001000 e cidade | Endereço encontrado |
+| Filtro sem correspondências | Mensagem exibida, sem apagar favoritos |
+| Contador | Atualizado ao salvar e remover |
+| Recarregar após salvar e após remover | Alterações persistidas |
+| Leitura com JSON inválido, null, objeto e registros malformados | Verificada em teste isolado da função: sem exceção e somente registros válidos retornados |
+| Acesso ao armazenamento bloqueado | Leitura simulada: lista vazia, sem exceção |
+| Layout em 1280 px e 390 px | Rodapé abaixo dos favoritos, sem rolagem horizontal |
+
+Validação do campo, foco com useRef, carregamento, CEP inexistente e limpeza com “Nova consulta” também foram verificados no navegador durante a revisão anterior desta mesma versão da consulta.
+
+## Capturas da aplicação
+
+### Computador
+
+![BuscaCEP com consulta e favorito no computador](docs/imagens/desktop.png)
+
+### Celular
+
+<img src="docs/imagens/mobile.png" alt="BuscaCEP no celular" width="390" />
+
+## Roteiro de apresentação
+
+1. Felippe apresenta o objetivo, a SPA, os componentes e a biblioteca React Bootstrap.
+2. Demonstra uma entrada inválida e explica useState, validação, eventos e foco com useRef.
+3. Consulta um CEP válido e explica fetch, async/await, JSON, props e tratamento de carregamento e erros.
+4. Rafael salva o resultado, tenta duplicá-lo e explica o estado compartilhado no App.
+5. Filtra por cidade e CEP, demonstra uma busca sem resultados e explica filter e map.
+6. Recarrega a página, remove o favorito e explica useEffect e localStorage.
+7. Mostram a adaptação para celular, as responsabilidades e o histórico de commits.
+
+Antes da entrega, conferir no GitHub se o repositório está público e enviar as alterações locais. A apresentação é obrigatória conforme o enunciado da disciplina.

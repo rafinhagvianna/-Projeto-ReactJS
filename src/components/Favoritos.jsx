@@ -6,19 +6,25 @@ import Button from 'react-bootstrap/Button'
 function Favoritos({ favoritos, onRemover }) {
   const [filtro, setFiltro] = useState('')
 
-  const favoritosFiltrados = favoritos.filter((favorito) => {
-    const termo = filtro.toLowerCase().trim()
+  const termo = filtro.toLowerCase().trim()
+  const cepPesquisado = termo.replace(/-/g, '')
 
-    return (
-      favorito.cep.toLowerCase().includes(termo) ||
-      favorito.localidade?.toLowerCase().includes(termo)
-    )
+  const favoritosFiltrados = favoritos.filter((favorito) => {
+    const correspondeCep = /^\d+$/.test(cepPesquisado) &&
+      favorito.cep.replace(/-/g, '').includes(cepPesquisado)
+    const correspondeCidade = (favorito.localidade || '').toLowerCase().includes(termo)
+
+    return termo === '' || correspondeCep || correspondeCidade
   })
 
   return (
     <Card as="section" className="shadow-sm mt-4" aria-labelledby="titulo-favoritos">
       <Card.Body>
         <h2 id="titulo-favoritos" className="h4">Favoritos</h2>
+        <p className="text-secondary" role="status">
+          {favoritos.length} {favoritos.length === 1 ? 'endereço salvo' : 'endereços salvos'}
+          {termo && ` · ${favoritosFiltrados.length} encontrados`}
+        </p>
 
         <Form.Control
           type="search"
@@ -32,6 +38,10 @@ function Favoritos({ favoritos, onRemover }) {
         {favoritos.length === 0 ? (
           <p className="text-secondary mb-0">
             Nenhum endereço salvo nos favoritos.
+          </p>
+        ) : favoritosFiltrados.length === 0 ? (
+          <p className="text-secondary mb-0" role="status">
+            Nenhum endereço encontrado para este filtro.
           </p>
         ) : (
           <div className="lista-favoritos">

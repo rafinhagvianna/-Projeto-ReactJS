@@ -8,19 +8,22 @@ import Col from 'react-bootstrap/Col'
 import Card from 'react-bootstrap/Card'
 import FormularioCEP from './components/FormularioCEP.jsx'
 import Favoritos from './components/Favoritos.jsx'
+import { carregarFavoritos } from './services/favoritos.js'
 
 function App() {
   const [endereco, setEndereco] = useState(null)
   const [erroConsulta, setErroConsulta] = useState('')
   const [carregando, setCarregando] = useState(false)
-  const [favoritos, setFavoritos] = useState(() => {
-    const favoritosSalvos = localStorage.getItem('favoritos')
-
-    return favoritosSalvos ? JSON.parse(favoritosSalvos) : []
-  })
+  const [favoritos, setFavoritos] = useState(carregarFavoritos)
+  const [erroFavoritos, setErroFavoritos] = useState('')
 
   useEffect(() => {
-    localStorage.setItem('favoritos', JSON.stringify(favoritos))
+    try {
+      localStorage.setItem('favoritos', JSON.stringify(favoritos))
+      setErroFavoritos('')
+    } catch {
+      setErroFavoritos('Não foi possível salvar os favoritos neste navegador. As alterações serão mantidas apenas enquanto esta página estiver aberta.')
+    }
   }, [favoritos])
 
   function limparConsulta() {
@@ -38,7 +41,7 @@ function App() {
     if (!endereco) return
 
     setFavoritos((favoritosAtuais) => {
-      const jaExiste = favoritosAtuais.some((favorito) => favorito.cep === endereco.cep)
+      const jaExiste = favoritosAtuais.some((favorito) => favorito.cep.replace('-', '') === endereco.cep.replace('-', ''))
 
       if (jaExiste) return favoritosAtuais
 
@@ -81,7 +84,7 @@ function App() {
       <Container as="main" className="py-4">
         <Row className="g-4">
           <Col xs={12} md={5}>
-            <Card as="section" className="h-100 shadow-sm" aria-labelledby="titulo-consulta">
+            <Card as="section" className="shadow-sm" aria-labelledby="titulo-consulta">
               <Card.Body>
                 <h2 id="titulo-consulta" className="h4">Consultar CEP</h2>
                 <p className="text-secondary">Encontre o endereço a partir do CEP.</p>
@@ -105,6 +108,11 @@ function App() {
               endereco={endereco}
               onFavoritar={salvarFavorito}
             />
+            {erroFavoritos && (
+              <Alert variant="warning" className="mt-4 mb-0" role="alert">
+                {erroFavoritos}
+              </Alert>
+            )}
             <Favoritos favoritos={favoritos} onRemover={removerFavorito} />
           </Col>
         </Row>
