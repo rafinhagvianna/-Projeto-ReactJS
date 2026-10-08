@@ -2,6 +2,10 @@
 
 Projeto 1 da disciplina **Programação Web Fullstack**.
 
+## Vídeo de apresentação
+
+[Assistir à apresentação do BuscaCEP](https://drive.google.com/file/d/1T4KilHRoxRo8FDZfn-kD7MSb--cZ4dlw/view?usp=drive_link)
+
 ## Objetivo
 
 Desenvolver uma aplicação React de página única (SPA) para consultar endereços pelo CEP utilizando a API ViaCEP e organizar os resultados em favoritos. As consultas são feitas com AJAX, sem recarregar a página.
